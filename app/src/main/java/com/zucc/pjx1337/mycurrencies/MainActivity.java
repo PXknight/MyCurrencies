@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -34,13 +35,14 @@ import java.util.Properties;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    private Button mCalcButton;
+    private Button mCalcButton, mHisButton;
     private TextView mConvertedTextView;
     private EditText mAmountEditText;
     private Spinner mForSpinner, mHomSpinner;
     private String[] mCurrencies;
+    private DatabaseHelper dbHelper;
 
-    public static final String FOR = "For_CURRENCY";
+    public static final String FOR = "FOR_CURRENCY";
     public static final String HOM = "HOM_CURRENCY";
 
     //this will contain my developers key
@@ -59,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        dbHelper = new DatabaseHelper(this, "Currencies.db", null, 1);
+        dbHelper.getWritableDatabase();
         //从Bundle中提取货币代码
         ArrayList<String> arrayList = ((ArrayList<String>)
                 getIntent().getSerializableExtra(SplashActivity.KEY_ARRAYLIST));
@@ -69,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         mConvertedTextView = (TextView)findViewById(R.id.txt_converted);
         mAmountEditText = (EditText)findViewById(R.id.edt_amount);
         mCalcButton = (Button)findViewById(R.id.btn_calc);
+        mHisButton = (Button)findViewById(R.id.btn_history);
         mForSpinner = (Spinner)findViewById(R.id.spn_for);
         mHomSpinner = (Spinner)findViewById(R.id.spn_hom);
 
@@ -118,9 +123,23 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         });
         mKey = getKey("open_key");
 
+        mHisButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
+                startActivity(intent);
+            }
+        });
+
+    }
+    //创建菜单
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
     }
 
-
+    //menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -158,11 +177,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private void launchBrowser(String strUri) {
         if (isOnline()) {
             Uri uri = Uri.parse(strUri);
-//call an implicit intent
+            //call an implicit intent
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             startActivity(intent);
         }
     }
+
+    //交换货币位置
     private void invertCurrencies() {
         int nFor = mForSpinner.getSelectedItemPosition();
         int nHom = mHomSpinner.getSelectedItemPosition();
@@ -177,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
-
+    //Spinner
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (parent.getId()) {
@@ -247,7 +268,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     /**
-     * 钱币转换任务
+     * 汇率转换
      */
     private class CurrencyConverterTask extends AsyncTask<String, Void, JSONObject> {
         private ProgressDialog progressDialog;
