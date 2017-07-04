@@ -15,7 +15,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + "id integer primary key autoincrement, "
             + "fCurrencynum integer, "
             + "fCurrency text, "
-            + "hCurrencynum integer, "
+            + "hCurrencynum real, "
             + "hCurrency text)";
     private Context mContext;
 
@@ -32,5 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("drop table if exists Currencies");
+        onCreate(db);
     }
 }

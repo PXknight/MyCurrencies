@@ -2,10 +2,12 @@ package com.zucc.pjx1337.mycurrencies;
 
 
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -61,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        dbHelper = new DatabaseHelper(this, "Currencies.db", null, 1);
+        dbHelper = new DatabaseHelper(this, "Currencies.db", null, 3);
         dbHelper.getWritableDatabase();
         //从Bundle中提取货币代码
         ArrayList<String> arrayList = ((ArrayList<String>)
@@ -119,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             public void onClick(View v) {
 
                 new CurrencyConverterTask().execute(URL_BASE+mKey);
+
             }
         });
         mKey = getKey("open_key");
@@ -323,9 +326,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 mConvertedTextView.setText("");
                 e.printStackTrace();
             }
-            mConvertedTextView.setText(DECIMAL_FORMAT.format(dCalculated) + " " + strHomCode);
+            mConvertedTextView.setText(DECIMAL_FORMAT.format(dCalculated) + " ");
             progressDialog.dismiss();
 
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            //组装数据
+            values.put("fCurrencynum", mAmountEditText.getText().toString());
+            values.put("fCurrency",strForCode);
+            values.put("hCurrencynum",mConvertedTextView.getText().toString());
+            values.put("hCurrency",strHomCode);
+            db.insert("Currencies", null, values);
             //for testing
 //            if (mCurrencyTaskCallback != null) {
             //               mCurrencyTaskCallback.executionDone();
