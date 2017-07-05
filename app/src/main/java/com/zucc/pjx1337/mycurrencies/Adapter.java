@@ -53,9 +53,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder,final int position) {
         History history = HisList.get(position);
-        holder.fCurrencynum.setText(history.getfCurrencynum());
+        holder.fCurrencynum.setText(String.valueOf(history.getfCurrencynum()));
         holder.fCurrency.setText(history.getfCurrency());
-        holder.hCurrencynum.setText(history.gethCurrencynum().toString());
+        holder.hCurrencynum.setText(String.valueOf(history.gethCurrencynum()));
         holder.hCurrency.setText(history.gethCurrency());
     }
 
