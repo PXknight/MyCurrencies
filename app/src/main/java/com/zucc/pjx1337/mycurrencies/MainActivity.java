@@ -12,6 +12,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.renderscript.Sampler;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -25,6 +28,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ashokvarma.bottomnavigation.BottomNavigationBar;
+import com.ashokvarma.bottomnavigation.BottomNavigationItem;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,7 +43,7 @@ import java.util.Properties;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    private Button mCalcButton, mHisButton;
+    private Button mCalcButton;
     private TextView mConvertedTextView;
     private EditText mAmountEditText;
     private Spinner mForSpinner, mHomSpinner;
@@ -58,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             DecimalFormat("#,##0.00000");
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,9 +83,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         mConvertedTextView = (TextView)findViewById(R.id.txt_converted);
         mAmountEditText = (EditText)findViewById(R.id.edt_amount);
         mCalcButton = (Button)findViewById(R.id.btn_calc);
-        mHisButton = (Button)findViewById(R.id.btn_history);
         mForSpinner = (Spinner)findViewById(R.id.spn_for);
         mHomSpinner = (Spinner)findViewById(R.id.spn_hom);
+
+
 
         //controller:mediates model and view
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
@@ -119,20 +128,20 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         mCalcButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                new CurrencyConverterTask().execute(URL_BASE+mKey);
-
+                if (mAmountEditText.getText().length()<1) {
+                    Toast.makeText(
+                            MainActivity.this,
+                            "请输入想要转换的货币数值" ,
+                            Toast.LENGTH_LONG
+                    ).show();
+                }else {
+                    new CurrencyConverterTask().execute(URL_BASE + mKey);
+                }
             }
         });
         mKey = getKey("open_key");
 
-        mHisButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
-                startActivity(intent);
-            }
-        });
+
 
     }
     //创建菜单
@@ -147,6 +156,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id){
+            case R.id.mnu_search:
+                Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.mnu_diagram:
+                Intent intent1 = new Intent(MainActivity.this, DiagramActivity.class);
+                startActivity(intent1);
+                break;
             case R.id.mnu_invert:
                 //TODO define behavior here
                 invertCurrencies();

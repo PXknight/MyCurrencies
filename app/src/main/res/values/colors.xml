@@ -9,4 +9,7 @@
     <color name="grey_light">#AAA</color>
     <color name="turquoise">#ff22e9ff</color>
     <color name="flat_blue">#ff1a51f4</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
 </resources>
