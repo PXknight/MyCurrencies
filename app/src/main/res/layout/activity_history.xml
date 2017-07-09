@@ -19,75 +19,77 @@
 
         </LinearLayout>
 
-    <EditText
-        android:id="@+id/edt_search"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/grey_very_dark"
-        android:textColor="@color/white"
-        android:textSize="30sp"></EditText>
-
-    <!--<SearchView-->
-        <!--android:id="@+id/searchView"-->
+    <!--<EditText-->
+        <!--android:id="@+id/edt_search"-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="wrap_content"-->
-        <!--android:background="@color/white"-->
-        <!--android:iconifiedByDefault="false"-->
-        <!--android:layout_marginLeft="5dp"-->
-        <!--android:layout_marginRight="5dp"-->
-        <!--android:queryHint="请输入搜索内容" />-->
-
-    <LinearLayout
-        android:layout_width="fill_parent"
+        <!--android:background="@color/grey_very_dark"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:textSize="30sp"></EditText>-->
+    <android.support.v7.widget.SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:background="@color/black"
+        android:iconifiedByDefault="false"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:backgroundTint="@color/grey_light"
+        android:closeIcon="@color/grey_dark"
+        ></android.support.v7.widget.SearchView>
 
 
-        <Button
-            android:id="@+id/btn_searchFCN"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+    <!--<LinearLayout-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal">-->
 
-            android:layout_weight="1"
-            android:text="SearchFCN"
-            android:textColor="@color/white"
-            />
 
-        <Button
-            android:id="@+id/btn_searchFC"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <!--<Button-->
+            <!--android:id="@+id/btn_searchFCN"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
 
-            android:layout_weight="1"
-            android:text="SearchFC"
-            android:textColor="@color/white"
-            />
+            <!--android:layout_weight="1"-->
+            <!--android:text="SearchFCN"-->
+            <!--android:textColor="@color/white"-->
+            <!--/>-->
 
-    </LinearLayout>
+        <!--<Button-->
+            <!--android:id="@+id/btn_searchFC"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <!--android:layout_weight="1"-->
+            <!--android:text="SearchFC"-->
+            <!--android:textColor="@color/white"-->
+            <!--/>-->
 
-    <Button
-            android:id="@+id/btn_searchHCN"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-        android:layout_weight="1"
-            android:text="SearchHCN"
-            android:textColor="@color/white"
-            />
+    <!--</LinearLayout>-->
 
-        <Button
-            android:id="@+id/btn_searchHC"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="SearchHC"
-            android:textColor="@color/white"
-            />
-    </LinearLayout>
+    <!--<LinearLayout-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal">-->
+
+    <!--<Button-->
+            <!--android:id="@+id/btn_searchHCN"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+            <!--android:text="SearchHCN"-->
+            <!--android:textColor="@color/white"-->
+            <!--/>-->
+
+        <!--<Button-->
+            <!--android:id="@+id/btn_searchHC"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="SearchHC"-->
+            <!--android:textColor="@color/white"-->
+            <!--/>-->
+    <!--</LinearLayout>-->
 
     <LinearLayout
         android:layout_width="match_parent"
