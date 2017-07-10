@@ -17,6 +17,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + "fCurrency text, "
             + "hCurrencynum real, "
             + "hCurrency text)";
+
+    public static final String CREATE_CHART = "create table Chart ("
+            + "id integer primary key autoincrement, "
+            + "CNYnum integer, "
+            + "USDnum real) ";
     private Context mContext;
 
     public DatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -27,6 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_CURRENCIES);
+        db.execSQL(CREATE_CHART);
         Toast.makeText(mContext, "Already", Toast.LENGTH_SHORT).show();
     }
 

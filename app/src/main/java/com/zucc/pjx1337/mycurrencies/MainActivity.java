@@ -2,18 +2,24 @@ package com.zucc.pjx1337.mycurrencies;
 
 
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.res.AssetManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +40,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Properties;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -57,8 +65,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private static final DecimalFormat DECIMAL_FORMAT = new
             DecimalFormat("#,##0.00000");
 
-
-
+    private int i = 0;
+    private int TIME = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,10 +85,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         mConvertedTextView = (TextView)findViewById(R.id.txt_converted);
         mAmountEditText = (EditText)findViewById(R.id.edt_amount);
         mCalcButton = (Button)findViewById(R.id.btn_calc);
-        mChartButton = (Button)findViewById(R.id.btn_chart);
+        //mChartButton = (Button)findViewById(R.id.btn_chart);
         mForSpinner = (Spinner)findViewById(R.id.spn_for);
         mHomSpinner = (Spinner)findViewById(R.id.spn_hom);
-
+        timer.schedule(task, 1000, 60000); // 1s后执行task,经过6min再次执行
 
 
         //controller:mediates model and view
@@ -127,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     Toast.makeText(
                             MainActivity.this,
                             "请输入想要转换的货币数值" ,
-                            Toast.LENGTH_LONG
+                            Toast.LENGTH_SHORT
                     ).show();
                 }else {
                     new CurrencyConverterTask().execute(URL_BASE + mKey);
@@ -136,17 +144,43 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         });
         mKey = getKey("open_key");
 
-        mChartButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent1 = new Intent(MainActivity.this, ChartActivity.class);
-                startActivity(intent1);
-            }
-        });
+//        mChartButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                new CurrencyConverterForChart().execute(URL_BASE + mKey);
+//                Toast.makeText(
+//                        MainActivity.this,
+//                        "成功取得" ,
+//                        Toast.LENGTH_SHORT
+//                ).show();
+//            }
+//        });
 
 
 
     }
+
+    Handler handler = new Handler() {
+        public void handleMessage(Message msg) {
+            if (msg.what == 1) {
+                new CurrencyConverterForChart().execute(URL_BASE + mKey);
+                Log.i("MainActivity", "已请求");
+            }
+            super.handleMessage(msg);
+        };
+    };
+    Timer timer = new Timer();
+    TimerTask task = new TimerTask() {
+
+        @Override
+        public void run() {
+            // 需要做的事:发送消息
+            Message message = new Message();
+            message.what = 1;
+            handler.sendMessage(message);
+        }
+    };
+
     //创建菜单
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -361,6 +395,74 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 //            if (mCurrencyTaskCallback != null) {
             //               mCurrencyTaskCallback.executionDone();
             //          }
+        }
+    }
+
+    /**
+     * 汇率转换
+     */
+    private class CurrencyConverterForChart extends AsyncTask<String, Void, JSONObject> {
+//        private ProgressDialog progressDialog;
+//        @Override
+//        protected void onPreExecute() {
+//            progressDialog = new ProgressDialog(MainActivity.this);
+//            progressDialog.setTitle("Calculating Result...");
+//            progressDialog.setMessage("One moment please...");
+//            progressDialog.setCancelable(true);
+//            progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
+//                    "Cancel", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            CurrencyConverterTask.this.cancel(true);
+//                            progressDialog.dismiss();
+//                        }
+//                    });
+//            progressDialog.show();
+//        }
+        @Override
+        protected JSONObject doInBackground(String... params) {
+            return new JSONParser().getJSONFromUrl(params[0]);
+        }
+        @Override
+        protected void onPostExecute(JSONObject jsonObject) {
+            double dCalculated = 0.0;
+            String strForCode = "USD";
+
+            String strHomCode = "CNY";
+            String strAmount = String.valueOf(1);
+            try {
+                if (jsonObject == null){
+                    throw new JSONException("no data available.");
+                }
+                JSONObject jsonRates = jsonObject.getJSONObject(RATES);
+                if (strHomCode.equalsIgnoreCase("USD")){
+                    dCalculated = Double.parseDouble(strAmount) / jsonRates.getDouble(strForCode);
+                } else if (strForCode.equalsIgnoreCase("USD")) {
+                    dCalculated = Double.parseDouble(strAmount) * jsonRates.getDouble(strHomCode) ;
+                }
+                else {
+                    dCalculated = Double.parseDouble(strAmount) * jsonRates.getDouble(strHomCode)
+                            / jsonRates.getDouble(strForCode) ;
+                }
+            } catch (JSONException e) {
+                Toast.makeText(
+                        MainActivity.this,
+                        "There's been a JSON exception: " + e.getMessage(),
+                        Toast.LENGTH_LONG
+                ).show();
+                //mConvertedTextView.setText("");
+                e.printStackTrace();
+            }
+            String USDnum = (DECIMAL_FORMAT.format(dCalculated) + " ");
+
+
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            //组装数据
+            values.put("CNYnum",strAmount);
+            values.put("USDnum", USDnum);
+            db.insert("Chart", null, values);
+
         }
     }
 
