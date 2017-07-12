@@ -2,36 +2,22 @@ package com.zucc.pjx1337.mycurrencies;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import lecho.lib.hellocharts.animation.ChartAnimationListener;
-import lecho.lib.hellocharts.gesture.ZoomType;
-import lecho.lib.hellocharts.listener.ColumnChartOnValueSelectListener;
 import lecho.lib.hellocharts.listener.LineChartOnValueSelectListener;
 import lecho.lib.hellocharts.model.Axis;
-import lecho.lib.hellocharts.model.Column;
-import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
-import lecho.lib.hellocharts.model.SubcolumnValue;
 import lecho.lib.hellocharts.model.ValueShape;
 import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.util.ChartUtils;
-import lecho.lib.hellocharts.view.Chart;
 import lecho.lib.hellocharts.view.LineChartView;
 
 public class ChartActivity extends AppCompatActivity {
@@ -111,7 +97,7 @@ public class ChartActivity extends AppCompatActivity {
         // Reset viewport height range to (6,9)
         final Viewport v = new Viewport(chart.getMaximumViewport());
         v.bottom = 6;
-        v.top = 9;
+        v.top = 7;
         v.left = 0;
         v.right = numberOfPoints - 1;
         chart.setMaximumViewport(v);
@@ -126,10 +112,6 @@ public class ChartActivity extends AppCompatActivity {
 
             List<PointValue> values = new ArrayList<PointValue>();
 
-
-//            for (int j = 0; j < numberOfPoints; ++j) {
-//                values.add(new PointValue(j, randomNumbersTab[i][j]));
-//            }
             int j = 0;
             if (cursor.moveToFirst()) {
                 do {

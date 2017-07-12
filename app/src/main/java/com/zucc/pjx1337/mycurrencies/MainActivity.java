@@ -65,8 +65,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private static final DecimalFormat DECIMAL_FORMAT = new
             DecimalFormat("#,##0.00000");
 
-    private int i = 0;
-    private int TIME = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         //mChartButton = (Button)findViewById(R.id.btn_chart);
         mForSpinner = (Spinner)findViewById(R.id.spn_for);
         mHomSpinner = (Spinner)findViewById(R.id.spn_hom);
-        timer.schedule(task, 1000, 60000); // 1s后执行task,经过6min再次执行
+        timer.schedule(task, 1000, 600000); // 1s后执行task,经过6min再次执行
 
 
         //controller:mediates model and view
@@ -144,19 +142,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         });
         mKey = getKey("open_key");
 
-//        mChartButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                new CurrencyConverterForChart().execute(URL_BASE + mKey);
-//                Toast.makeText(
-//                        MainActivity.this,
-//                        "成功取得" ,
-//                        Toast.LENGTH_SHORT
-//                ).show();
-//            }
-//        });
-
-
 
     }
 
@@ -202,11 +187,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 startActivity(intent1);
                 break;
             case R.id.mnu_invert:
-                //TODO define behavior here
                 invertCurrencies();
                 break;
             case R.id.mnu_codes:
-                //TODO define behavior here
                 launchBrowser(SplashActivity.URL_CODES);
                 break;
             case R.id.mnu_exit:
@@ -391,10 +374,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             values.put("hCurrencynum",mConvertedTextView.getText().toString());
             values.put("hCurrency",strHomCode);
             db.insert("Currencies", null, values);
-            //for testing
-//            if (mCurrencyTaskCallback != null) {
-            //               mCurrencyTaskCallback.executionDone();
-            //          }
+
         }
     }
 
@@ -402,23 +382,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
      * 汇率转换
      */
     private class CurrencyConverterForChart extends AsyncTask<String, Void, JSONObject> {
-//        private ProgressDialog progressDialog;
-//        @Override
-//        protected void onPreExecute() {
-//            progressDialog = new ProgressDialog(MainActivity.this);
-//            progressDialog.setTitle("Calculating Result...");
-//            progressDialog.setMessage("One moment please...");
-//            progressDialog.setCancelable(true);
-//            progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
-//                    "Cancel", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            CurrencyConverterTask.this.cancel(true);
-//                            progressDialog.dismiss();
-//                        }
-//                    });
-//            progressDialog.show();
-//        }
+
         @Override
         protected JSONObject doInBackground(String... params) {
             return new JSONParser().getJSONFromUrl(params[0]);
@@ -450,7 +414,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         "There's been a JSON exception: " + e.getMessage(),
                         Toast.LENGTH_LONG
                 ).show();
-                //mConvertedTextView.setText("");
+
                 e.printStackTrace();
             }
             String USDnum = (DECIMAL_FORMAT.format(dCalculated) + " ");

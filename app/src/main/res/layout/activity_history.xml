@@ -19,13 +19,6 @@
 
         </LinearLayout>
 
-    <!--<EditText-->
-        <!--android:id="@+id/edt_search"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:background="@color/grey_very_dark"-->
-        <!--android:textColor="@color/white"-->
-        <!--android:textSize="30sp"></EditText>-->
     <android.support.v7.widget.SearchView
         android:id="@+id/searchView"
         android:layout_width="match_parent"
@@ -38,58 +31,6 @@
         android:closeIcon="@color/grey_dark"
         ></android.support.v7.widget.SearchView>
 
-
-    <!--<LinearLayout-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="horizontal">-->
-
-
-        <!--<Button-->
-            <!--android:id="@+id/btn_searchFCN"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-
-            <!--android:layout_weight="1"-->
-            <!--android:text="SearchFCN"-->
-            <!--android:textColor="@color/white"-->
-            <!--/>-->
-
-        <!--<Button-->
-            <!--android:id="@+id/btn_searchFC"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-
-            <!--android:layout_weight="1"-->
-            <!--android:text="SearchFC"-->
-            <!--android:textColor="@color/white"-->
-            <!--/>-->
-
-    <!--</LinearLayout>-->
-
-    <!--<LinearLayout-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="horizontal">-->
-
-    <!--<Button-->
-            <!--android:id="@+id/btn_searchHCN"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="1"-->
-            <!--android:text="SearchHCN"-->
-            <!--android:textColor="@color/white"-->
-            <!--/>-->
-
-        <!--<Button-->
-            <!--android:id="@+id/btn_searchHC"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1"-->
-            <!--android:text="SearchHC"-->
-            <!--android:textColor="@color/white"-->
-            <!--/>-->
-    <!--</LinearLayout>-->
 
     <LinearLayout
         android:layout_width="match_parent"
